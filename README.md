@@ -43,20 +43,6 @@ giffgaff 官方帮助文章 [Understanding why your number has been deactivated]
 5. Branch 选择 `main`，目录选择 `/ (root)`，保存。
 6. 等待部署完成，访问 `https://你的用户名.github.io/giffgaff-number-keeper/`。
 
-## 让 Codex 帮你创建公开仓库
-
-我已经放好了 `.env` 和 `scripts/publish-to-github.ps1`。你只需要填写 `.env`：
-
-```env
-GITHUB_TOKEN=你的 GitHub token
-GITHUB_OWNER=你的 GitHub 用户名
-GITHUB_REPO_NAME=giffgaff-number-keeper
-GITHUB_REPO_DESCRIPTION=Static giffgaff SIM number keeper helper
-GITHUB_REPO_HOMEPAGE=
-```
-
-Token 最省事的方式是使用 classic personal access token，并勾选 `public_repo` scope。也可以使用 fine-grained token，但它必须能创建公开仓库并写入仓库内容；如果你的 fine-grained token 不能创建仓库，可以先在 GitHub 手动创建一个空的公开仓库，再给 token 授权写入该仓库内容。填好后告诉 Codex 继续发布即可。
-
 ## 文件说明
 
 ```text
@@ -64,10 +50,7 @@ Token 最省事的方式是使用 classic personal access token，并勾选 `pub
 ├── index.html   # 单页应用
 ├── payload.bin  # 150 KiB 下载目标文件
 ├── README.md    # 项目说明
-├── scripts/
-│   └── publish-to-github.ps1
 ├── LICENSE      # MIT License
-├── .env.example
 ├── .gitignore
 └── .nojekyll    # 让 GitHub Pages 原样发布静态文件
 ```
