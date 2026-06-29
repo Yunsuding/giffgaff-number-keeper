@@ -99,10 +99,6 @@ python -m http.server 8000
 - 如果 SIM 已经停用，本工具不能恢复号码。官方帮助文章说明，停用后短期内可联系 giffgaff agents 申请 PAC，具体以官方页面为准。
 - 运营商计费、流量舍入和价格可能变化，本项目不写死费用估算。
 
-## Credit
-
-实现思路参考了 [dennischancs/gg-keeper](https://github.com/dennischancs/gg-keeper)，但本项目重新实现了界面、交互、说明文档和默认 payload 大小。
-
 ## License
 
 MIT
