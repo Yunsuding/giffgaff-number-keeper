@@ -53,32 +53,48 @@ $homepage = if ($envValues.ContainsKey("GITHUB_REPO_HOMEPAGE")) { $envValues["GI
 
 Set-Location -LiteralPath $ProjectRoot
 
-$repoBody = @{
-    name = $repo
-    description = $description
-    homepage = $homepage
-    private = $false
-    has_issues = $true
-    has_projects = $false
-    has_wiki = $false
-    auto_init = $false
-} | ConvertTo-Json
-
 $headers = @{
     Authorization = "Bearer $token"
     Accept = "application/vnd.github+json"
     "X-GitHub-Api-Version" = "2022-11-28"
 }
 
+$repoExists = $false
 try {
-    Invoke-RestMethod -Method Post -Uri "https://api.github.com/user/repos" -Headers $headers -Body $repoBody -ContentType "application/json" | Out-Null
-    Write-Host "Created GitHub repository: $owner/$repo"
+    Invoke-RestMethod -Method Get -Uri "https://api.github.com/repos/$owner/$repo" -Headers $headers | Out-Null
+    $repoExists = $true
+    Write-Host "Repository already exists: $owner/$repo"
 } catch {
     $statusCode = $_.Exception.Response.StatusCode.value__
-    if ($statusCode -eq 422) {
-        Write-Host "Repository may already exist: $owner/$repo"
-    } else {
+    if ($statusCode -ne 404) {
         throw
+    }
+}
+
+if (-not $repoExists) {
+    $repoBody = @{
+        name = $repo
+        description = $description
+        homepage = $homepage
+        private = $false
+        has_issues = $true
+        has_projects = $false
+        has_wiki = $false
+        auto_init = $false
+    } | ConvertTo-Json
+
+    try {
+        Invoke-RestMethod -Method Post -Uri "https://api.github.com/user/repos" -Headers $headers -Body $repoBody -ContentType "application/json" | Out-Null
+        Write-Host "Created GitHub repository: $owner/$repo"
+    } catch {
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        if ($statusCode -eq 422) {
+            Write-Host "Repository may already exist: $owner/$repo"
+        } elseif ($statusCode -eq 403) {
+            throw "GitHub token cannot create repositories. Create the public repository manually, or use a token with repository creation permission, then rerun this script."
+        } else {
+            throw
+        }
     }
 }
 

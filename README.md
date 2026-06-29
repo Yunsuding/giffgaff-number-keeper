@@ -55,7 +55,7 @@ GITHUB_REPO_DESCRIPTION=Static giffgaff SIM number keeper helper
 GITHUB_REPO_HOMEPAGE=
 ```
 
-Token 建议使用 fine-grained personal access token，并授予创建公开仓库和写入该仓库内容的权限；classic token 则至少需要 `public_repo` scope。填好后告诉 Codex 继续发布即可。
+Token 最省事的方式是使用 classic personal access token，并勾选 `public_repo` scope。也可以使用 fine-grained token，但它必须能创建公开仓库并写入仓库内容；如果你的 fine-grained token 不能创建仓库，可以先在 GitHub 手动创建一个空的公开仓库，再给 token 授权写入该仓库内容。填好后告诉 Codex 继续发布即可。
 
 ## 文件说明
 
