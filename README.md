@@ -14,6 +14,31 @@ giffgaff 官方帮助文章 [Understanding why your number has been deactivated]
 
 这个项目只覆盖第二种方式：使用 giffgaff SIM 的移动数据下载一个约 150 KiB 的静态文件。
 
+## 可能产生的费用
+
+本工具的 `payload.bin` 约 150 KiB。按 giffgaff 当前 UK pay as you go 数据价格 `10p/MB` 粗略估算，单次下载约等于 0.15 MB，理论费用约 1.5p。
+
+实际扣费可能不同：
+
+- 如果你有可用 plan/data allowance，通常会消耗套餐流量，而不是额外按 PAYG 数据扣费。
+- 如果没有套餐，可能按 PAYG 数据价格扣费；运营商计费舍入可能让实际费用高于理论值。
+- 浏览器、系统服务或后台应用可能产生额外流量，所以操作前应关闭 Wi-Fi 并限制其他应用联网。
+- giffgaff 价格和漫游规则可能变化，最终以 [giffgaff pricing](https://www.giffgaff.com/pricing) 和账户扣费记录为准。
+
+## 其他保号方式费用对比
+
+giffgaff 官方认可的保号动作不止移动数据。按当前 UK pay as you go 价格粗略比较：
+
+| 方式 | 当前费用参考 | 备注 |
+| --- | ---: | --- |
+| 本工具下载 150 KiB | 约 1.5p 起 | 按 10p/MB 估算；实际可能因舍入和额外流量更高 |
+| 打一个普通 UK 手机/座机号码 | 25p 起 | 25p/min，且通常有 1 分钟最低计费 |
+| 发一条普通 UK SMS | 10p 起 | 160 字符短信 10p/text |
+| 发一条 MMS | 30p 起 | MMS 30p/message，且没有必要为了保号用这种方式 |
+| 购买 Airtime Credit 或 plan | 按购买金额 | 能满足官方规则，但成本取决于你实际购买的 credit/plan |
+
+所以，如果只是为了产生一次低成本活动记录，使用少量移动数据通常比打电话或发短信更便宜；但最终是否扣费、扣多少，仍以 giffgaff 账户记录为准。
+
 ## 项目特点
 
 - 纯静态：`index.html` + `payload.bin`，适合 GitHub Pages。
