@@ -1,5 +1,6 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+$PSNativeCommandUseErrorActionPreference = $true
 
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $EnvPath = Join-Path $ProjectRoot ".env"
@@ -42,6 +43,18 @@ function Require-Value {
     }
 
     return $Values[$Name]
+}
+
+function Invoke-Git {
+    param(
+        [string[]] $Arguments,
+        [string] $Label = "git command"
+    )
+
+    & git @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "$Label failed with exit code $LASTEXITCODE"
+    }
 }
 
 $envValues = Read-DotEnv -Path $EnvPath
@@ -106,10 +119,10 @@ try {
 }
 
 if (-not $insideWorkTree) {
-    git init -b main
+    Invoke-Git -Arguments @("init", "-b", "main") -Label "git init"
 }
 
-git add .
+Invoke-Git -Arguments @("add", ".") -Label "git add"
 
 $hasStagedChanges = $false
 try {
@@ -119,12 +132,13 @@ try {
 }
 
 if ($hasStagedChanges) {
-    git commit -m "Initial static giffgaff keeper"
+    Invoke-Git -Arguments @("commit", "-m", "Initial static giffgaff keeper") -Label "git commit"
 } else {
     Write-Host "No staged changes to commit."
 }
 
 $remoteUrl = "https://github.com/$owner/$repo.git"
+$basicAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$token"))
 $existingRemote = ""
 try {
     $existingRemote = git remote get-url origin 2>$null
@@ -133,12 +147,12 @@ try {
 }
 
 if ([string]::IsNullOrWhiteSpace($existingRemote)) {
-    git remote add origin $remoteUrl
+    Invoke-Git -Arguments @("remote", "add", "origin", $remoteUrl) -Label "git remote add"
 } else {
-    git remote set-url origin $remoteUrl
+    Invoke-Git -Arguments @("remote", "set-url", "origin", $remoteUrl) -Label "git remote set-url"
 }
 
-git -c "http.extraheader=AUTHORIZATION: bearer $token" push -u origin main
+Invoke-Git -Arguments @("-c", "http.https://github.com/.extraheader=AUTHORIZATION: Basic $basicAuth", "push", "-u", "origin", "main") -Label "git push"
 
 Write-Host "Published: https://github.com/$owner/$repo"
 Write-Host "Enable GitHub Pages from Settings -> Pages -> Deploy from a branch -> main / root."
